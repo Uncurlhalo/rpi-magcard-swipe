@@ -8,10 +8,13 @@ accessFile = open("accessList.txt", "r")    	            # opens the access list
 accessList = accessFile.readlines()			    # creates a list of strings with one ID number per string
 accessFile.close()					    # close the file
 
+cardReader = MagSwipe()
 accessList = [number.strip() for number in accessList]	    # strips trailing new line characters from the list of strings.
 
 while True:					  	    # python do while, gets card input, if it isnt right length then repeats
 	cardNum = input('>>')				    # breaks on proper length string
+#   cardNum = cardReader.wait_for_swipe()
+#	will be used when the card reader is present rather than a keyboard
 	if len(cardNum) == 9:
 		break
 
@@ -25,6 +28,8 @@ while cardNum != "quit":				    # asks for input reaptedly
 
 	while True:                                         # do repeatedly till we get good input
 		cardNum = input('>>')
+#		cardNum = cardReader.wait_for_swipe()
+#		will be used when the card reader is present rather than a keyboard
 		if len(cardNum) == 9 or cardNum == "quit":  # check we are getting the right length ID or are quiting
 			break
 
