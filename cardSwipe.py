@@ -1,5 +1,6 @@
 import time
 import subprocess
+import readCard
 
 print("Program Starting")
 
