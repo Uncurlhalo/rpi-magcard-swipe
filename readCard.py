@@ -4,7 +4,7 @@
 # Code will be placed under public domain
 # 
 # MagTek USB magnetic-swipe-reader
-F# orked from: Copyright (c) 2010 - Micah Carrick - http://www.micahcarrick.com/credit-card-reader-pyusb.html
+# orked from: Copyright (c) 2010 - Micah Carrick - http://www.micahcarrick.com/credit-card-reader-pyusb.html
 
 import sys
 import usb.core
