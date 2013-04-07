@@ -47,29 +47,29 @@ class MagSwipe:
         # wait for swipe
         data = []
         swiped = False
-        print "Please swipe card..."
+        print("Please swipe card...")
 
         while 1:
             try:
                 data += self._endpoint.read(self._endpoint.wMaxPacketSize)
                 if not swiped:
-                    print "Reading card..."
+                    print("Reading card...")
                 swiped = True
 
             except usb.core.USBError as e:
                 if e.args[0] == 110 and swiped:
                     if len(data) < DATA_SIZE:
-                        print "Bad swipe, try again. (%d bytes)" % len(data)
-                        print "Data: %s" % ''.join(map(chr, data))
-			print data #print raw data
+                        print("Bad swipe, try again. (%d bytes)" % len(data))
+                        print("Data: %s" % ''.join(map(chr, data)))
+			print(data) #print raw data
                         data = []
                         swiped = False
                         continue
                     else:
-			print "Data: %s" % '' .join(map(chr, data))
+			print("Data: %s" % '' .join(map(chr, data)))
                         break   # got data
 
         return data
 
 if __name__ == "__main__":
-    print MagSwipe().wait_for_swipe()
+    print(MagSwipe().wait_for_swipe())
