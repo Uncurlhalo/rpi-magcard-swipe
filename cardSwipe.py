@@ -2,38 +2,53 @@
 
 import time
 import subprocess
-import readCard
+#import readCard    - Commented out right now due to errors in readCard
 
 print("Program Starting")
 
-accessFile = open("accessList.txt", "r")    	            # opens the access list
-accessList = accessFile.readlines()			    # creates a list of strings with one ID number per string
-accessFile.close()					    # close the file
+# opens the access list
+accessFile = open("accessList.txt", "r")
 
-cardReader = MagSwipe()
-accessList = [number.strip() for number in accessList]	    # strips trailing new line characters from the list of strings.
+# creates a list of strings with one ID number per string
+accessList = accessFile.readlines()
 
-while True:					  	    # python do while, gets card input, if it isnt right length then repeats
-	cardNum = input('>>')				    # breaks on proper length string
-#   cardNum = cardReader.wait_for_swipe()
-#	will be used when the card reader is present rather than a keyboard
-	if len(cardNum) == 9:
-		break
+accessFile.close()
 
-while cardNum != "quit":				    # asks for input reaptedly
-	if cardNum in accessList:			    # checks if input number is in accessList
-		subprocess.call("./relayON.sh")		    # turns the relay on
-		time.sleep(6)				    # waits a few seconds to let them open the door
-		subprocess.call("./relayOFF.sh")  	    # turns the relay off
-	else:
-		print("ID not in Access List - Access Denied!")
+# strips trailing new line characters from the list of strings.
+#cardReader = MagSwipe()
+accessList = [number.strip() for number in accessList]
 
-	while True:                                         # do repeatedly till we get good input
-		cardNum = input('>>')
-#		cardNum = cardReader.wait_for_swipe()
-#		will be used when the card reader is present rather than a keyboard
-		if len(cardNum) == 9 or cardNum == "quit":  # check we are getting the right length ID or are quiting
-			break
+while True:
+  # Changed to raw_input, to not attempt to evaluate the input,
+  # but simply keep it as a string.
+  cardNum = raw_input('>>')
 
-print("You have quit")
+  # EE Milestone 2
+  # cardNum = cardReader.wait_for_swipe()
+
+
+
+  print "Input was", cardNum
+  
+  if cardNum == 'quit':
+    break
+
+  # CS Milestone 2
+  # updateAccessList()
+  # Query some remote list and update our own internal list
+
+  if cardNum in accessList: 
+    print("ID Successfully found in list. ACCESS GRANTED");
+    # EE Milestone 1: Indicate success somehow!
+    #subprocess.call("./relayON.sh")		 turns the relay on
+    #time.sleep(6)				   
+    #subprocess.call("./relayOFF.sh")  	 turns the relay off
+
+  else: 
+    print("ID Not found in list. ACCESS DENIED");
+
+
+
+
+print("Thank you! Quitting.")
 exit()
