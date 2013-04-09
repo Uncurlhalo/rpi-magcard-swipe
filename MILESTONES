@@ -1,0 +1,20 @@
+Here is a general outline of the milestones we'd like to make:
+
+  CS Milestone 1: Basic python program that will attempt to read
+               keyboard input and check a static list of numbers.
+
+  CS Milestone 2: Implement a cron job or some sort of retreival 
+               of a list of correct numbers from some remote source.
+
+               -----------------------------------------------
+
+  EE Milestone 1: Figure out how to interface with the PI's components
+                  and make some sort of indication upon success. Could
+                  possibly be lighting up something, or making a sound.
+
+  EE Milestone 2: Successfully interface with a card reader, if one
+                  is available to us. 
+
+  EE Milestone 3: Implement a slightly more complex form of 
+                  success notification, be it a lock release or some
+                  mechanical movement.
