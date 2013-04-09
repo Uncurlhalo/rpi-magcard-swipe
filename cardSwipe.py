@@ -40,9 +40,9 @@ while True:
   if cardNum in accessList: 
     print("ID Successfully found in list. ACCESS GRANTED");
     # EE Milestone 1: Indicate success somehow!
-    #subprocess.call("./relayON.sh")		 turns the relay on
-    #time.sleep(6)				   
-    #subprocess.call("./relayOFF.sh")  	 turns the relay off
+    subprocess.call("./relayON.sh")		 turns the relay on
+    time.sleep(6)				   
+    subprocess.call("./relayOFF.sh")  	 turns the relay off
 
   else: 
     print("ID Not found in list. ACCESS DENIED");
