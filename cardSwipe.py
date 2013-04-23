@@ -1,54 +1,34 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python 3
+#
+# Jacob Melton
+# Code is under public domain
+#
+# 
 
-import time
-import subprocess
-#import readCard    - Commented out right now due to errors in readCard
+import time, subprocess, readCard
 
 print("Program Starting")
 
-# opens the access list
-accessFile = open("accessList.txt", "r")
+cardReader = readCard.MagSwipe
+cardReader()
+tempCardNum = cardReader().wait_for_swipe()
 
-# creates a list of strings with one ID number per string
-accessList = accessFile.readlines()
+cardNum = ''.join(map(chr,tempCardNum[118:127])) # converts from list of ascii codes to string of chars removes school code from the info on the card so we just get the ID
+print(cardNum)
 
-accessFile.close()
+while True:				    # asks for input reaptedly only way to quit is to send SIGINTER, program is mean to run continually
+	accessFile = open("/usr/share/nginx/www/files/accessList.txt", "r")                 # opens the access list
+	accessList = accessFile.readlines()                         # creates a list of strings with one ID number per string
+	accessFile.close()                          # close the file
+	accessList = [number.strip() for number in accessList]      # strips trailing new line characters from the list of acces ID's
 
-# strips trailing new line characters from the list of strings.
-#cardReader = MagSwipe()
-accessList = [number.strip() for number in accessList]
+	if cardNum in accessList:			    # checks if input number is in accessList
+		subprocess.call("./relayON.sh")	#turns the relay on
+		time.sleep(6)
+		subprocess.call("./relayOFF.sh") #turns the relay off
+	else:
+		print("ID not in Access List - Access Denied!")
 
-while True:
-  # Changed to raw_input, to not attempt to evaluate the input,
-  # but simply keep it as a string.
-  cardNum = raw_input('>>')
-
-  # EE Milestone 2
-  # cardNum = cardReader.wait_for_swipe()
-
-
-
-  print "Input was", cardNum
-  
-  if cardNum == 'quit':
-    break
-
-  # CS Milestone 2
-  # updateAccessList()
-  # Query some remote list and update our own internal list
-
-  if cardNum in accessList: 
-    print("ID Successfully found in list. ACCESS GRANTED");
-    # EE Milestone 1: Indicate success somehow!
-    subprocess.call("./relayON.sh")		 turns the relay on
-    time.sleep(6)				   
-    subprocess.call("./relayOFF.sh")  	 turns the relay off
-
-  else: 
-    print("ID Not found in list. ACCESS DENIED");
-
-
-
-
-print("Thank you! Quitting.")
-exit()
+	tempCardNum = cardReader().wait_for_swipe()
+	cardNum = ''.join(map(chr,tempCardNum[118:127])) # converts from list of ascii codes to string of chars removes school code from the info on the card so we just get the ID
+	print(cardNum)

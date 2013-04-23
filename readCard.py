@@ -1,10 +1,10 @@
-#!/usr/bin/python
+#!/usr/bin/env python 3
 #
 # Bjoern Heller <tec@codeburn.de> (c) 2012
 # Code will be placed under public domain
 # 
 # MagTek USB magnetic-swipe-reader
-# orked from: Copyright (c) 2010 - Micah Carrick - http://www.micahcarrick.com/credit-card-reader-pyusb.html
+# Forked from: Copyright (c) 2010 - Micah Carrick - http://www.micahcarrick.com/credit-card-reader-pyusb.html
 
 import sys
 import usb.core
@@ -19,7 +19,7 @@ def chunks(l, n):
     for i in xrange(0, len(l), n):
         yield l[i:i+n]
 
-class MagSwipe:
+class MagSwipe():
     def __init__(self):
         # find the MagSwipe reader
         device = usb.core.find(idVendor=VENDOR_ID, idProduct=PRODUCT_ID)
@@ -48,27 +48,23 @@ class MagSwipe:
         data = []
         swiped = False
         print("Please swipe card...")
-
         while 1:
             try:
                 data += self._endpoint.read(self._endpoint.wMaxPacketSize)
                 if not swiped:
                     print("Reading card...")
                 swiped = True
-
+                
             except usb.core.USBError as e:
                 if e.args[0] == 110 and swiped:
                     if len(data) < DATA_SIZE:
                         print("Bad swipe, try again. (%d bytes)" % len(data))
-                        print("Data: %s" % ''.join(map(chr, data)))
-			print(data) #print raw data
-                        data = []
-                        swiped = False
-                        continue
+                       # print("Data: %s" % ''.join(map(chr, data)))
+                       # print(data) #print raw data
+                       	data = []
+                       	swiped = False
                     else:
-			print("Data: %s" % '' .join(map(chr, data)))
-                        break   # got data
-
+                        break #got data
         return data
 
 if __name__ == "__main__":
