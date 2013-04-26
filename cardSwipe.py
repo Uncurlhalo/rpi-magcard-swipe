@@ -6,12 +6,19 @@
 # 
 
 import time, subprocess, readCard
+import RPi.GPIO as GPIO
 
 print("Program Starting")
+GPIO.setwarnings(False) #disable warnings because we know the pins are already enabled
 
-cardReader = readCard.MagSwipe
-cardReader()
-tempCardNum = cardReader().wait_for_swipe()
+GPIO.setmode(GPIO.BOARD) # initialize pin numbering in board mode
+GPIO.setup(16, GPIO.OUT, initial=GPIO.LOW) # set pin 16 to be for output for acces sound
+GPIO.setup(18, GPIO.OUT, initial=GPIO.LOW) # set pin 18 to be for output for denial sound
+
+cardReader = readCard.MagSwipe # initialize a card reader
+cardReader()	# set it up as a default reader
+
+tempCardNum = cardReader().wait_for_swipe() #grab our first raw swipe
 
 cardNum = ''.join(map(chr,tempCardNum[118:127])) # converts from list of ascii codes to string of chars removes school code from the info on the card so we just get the ID
 print(cardNum)
@@ -24,11 +31,18 @@ while True:				    # asks for input reaptedly only way to quit is to send SIGINT
 
 	if cardNum in accessList:			    # checks if input number is in accessList
 		subprocess.call("./relayON.sh")	#turns the relay on
-		time.sleep(6)
+		GPIO.output(16, GPIO.HIGH) #output on pin 16
+		time.sleep(5)	#for 5 seconds
 		subprocess.call("./relayOFF.sh") #turns the relay off
+		GPIO.output(16, GPIO.LOW) #turn it off cause we are done
 	else:
 		print("ID not in Access List - Access Denied!")
+		GPIO.output(18, GPIO.HIGH) #turn on denied sound
+		time.sleep(5) 	#for 5 seconds
+		GPIO.output(18, GPIO.LOW) # turn off denied sound
 
 	tempCardNum = cardReader().wait_for_swipe()
 	cardNum = ''.join(map(chr,tempCardNum[118:127])) # converts from list of ascii codes to string of chars removes school code from the info on the card so we just get the ID
 	print(cardNum)
+
+GPIO.cleanup()
